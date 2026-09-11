@@ -1,0 +1,382 @@
+Assignments – Day 5
+Joins.
+Solve below queries using joins. Also check if a
+query can be written using subquery.
+Consider emp, dept and salgrade tables.
+
+1. Display ename, sal, deptno, dname of all  grade 3 salesman. 
+SELECT e.ename, e.sal, e.deptno, d.dname 
+FROM emp e 
+JOIN dept d ON e.deptno = d.deptno 
+JOIN salgrade s ON e.sal BETWEEN s.losal AND s.hisal 
+WHERE s.grade = 3 AND e.job = 'Salesman';
+
+
+2. List details of all employees who work for Dallas location and had joined in the year 1980. Try
+using join as well as subquery.
+JOIN 
+select e.ename ,e.hiredate, e.deptno, d.dname,d.loc
+from emp e
+join dept d
+on e.deptno = d.deptno
+where year(hiredate)='1980' and loc='Dallas';
+
+
+Subquery
+select * from emp
+where deptno in (select deptno from dept
+where loc = 'Dallas')
+and year(hiredate)='1980';
+
+
+3. List ename, sal, deptno, dname for all employees who earn more than the avg salary of the organization. Try using join as well as subquery
+
+select e.ename, e.sal, e.deptno, d.dname
+from emp e
+join dept d ON e.deptno = d.deptno
+where e.sal > (select avg(sal) from emp);
+
+select ename, sal, deptno
+(select dname from dept where dept.deptno = emp.deptno) as dname
+from emp e
+where sal > (select avg(sal) from emp);
+
+4. Display empno, ename, sal, deptno, dname and loc for all employees getting grade 2 salary.
+select e.empno, e.ename ,e.sal, e.deptno, d.dname,d.loc
+from emp e
+join dept d
+on e.deptno = d.deptno
+join salgrade s
+on e.sal between s.losal and s.hisal
+where grade =2;
+
+5. Consider emp and dept  table display empno, ename, deptno, dname and loc for all employees
+who are working as managers and have joined the organization in year 1981.
+select e.empno, e.ename , e.deptno, d.dname,d.loc
+from emp e
+join dept d
+on e.deptno = d.deptno
+where job= 'Manager' and year(hiredate) =1981;
+
+6. Consider emp and dept table display deptno, dname and loc to whom employees are assigned
+and also the depts to whom  employees are not assigned.  
+select d.deptno, e.ename,d. dname ,d.loc
+from dept d
+left outer join emp e
+on d.deptno= e.deptno;
+
+7. From emp table, display empno, ename, mgr and the name of manager to whom employee reports.
+select e.empno, e.ename, e.mgr, m.ename
+from emp e
+join emp m
+where e.mgr=m.empno
+order by empno;
+
+8. Display empno, ename, deptno, dname, sal, grade for all employees joined in the year 1981 and 1980.
+select e.empno, e.ename,e.hiredate ,e.deptno, d.dname, e.sal, s.grade
+from emp e
+join dept d
+on e.deptno = d.deptno
+join salgrade s
+on e.sal between s.losal and s.hisal
+where year(hiredate) in (1980,1981);
+
+9. Company decides to give rise to all employees depending on their salary grade. Information of which is stored in increment table.
+Create the table. Store  the data and solve the query.
+Create  table increment
+(
+    grade int,
+    hike int
+);
+insert following data
+(1,10),(2,7),(3,5),(4,2),(5,null)
+Salary hike is in percentage.
+Display empno, ename, deptno, dname, sal, grade ,hike and new salary for all employees. 
+New salary = salary + hike
+
+create table increment (
+  grade int,
+ hike int);
+ 
+insert into increment values
+(1, 10),
+(2, 7),
+(3, 5),
+(4, 2),
+(5, null);
+
+select e.empno, e.ename, e.deptno, d.dname, e.sal, s.grade, i.hike,
+(e.sal + (e.sal * i.hike / 100)) as new_salary
+from emp e
+join dept d 
+on e.deptno = d.deptno
+join salgrade s 
+on e.sal between s.losal and s.hisal
+join increment i 
+on s.grade = i.grade;
+ 
+10. For every employee display empno, ename, mgr and name of a manager to whom employee is
+reporting. Display the data for salesman.
+
+select e.empno, e.ename, e.mgr, m.ename as manager_name
+from emp e
+left join emp m on e.mgr = m.empno
+where lower(e.job) = 'salesman';
+
+11. Copy emp table as emp_data.
+Insert following rows in it.
+insert into emp_data(empno, ename, deptno, sal, job)
+values(9999,'Amit',80,'manager');
+
+insert into emp_data(empno, ename, deptno, sal, job)
+values(9999, 'Amit', 80, 3000.00, 'manager');
+
+1. Write a query to list empno ename deptno dname and loc for all employees to
+whom correct deptno is allocated.
+select e.empno, e.ename, e.deptno, d.dname, d.loc
+from emp_data e
+join dept d on e.deptno = d.deptno;
+
+2. Write a query to list empno ename deptno dname and loc for all employees to
+whom correct deptno is not allocated.
+select e.empno, e.ename, e.deptno, null as dname, null as loc
+from emp_data e
+where e.deptno not in (select deptno from dept);
+
+3. Write a query which will display dept no and dept names to which no employee is assigned. dept table.
+
+select d.deptno, d.dname
+from dept d
+left join emp_data e on d.deptno = e.deptno
+where e.empno is null;
+
+
+------------------------------------------------------------------------------
+Assignment =  2:
+
+
+Create following tables and solve
+the questions(joins. Try for subquery as well)
+
+create table faculty (
+ fid int primary key,
+fname varchar (20) not null,
+ sp_skill1 varchar (30),
+sp_skill2 varchar (30)
+);
+
+
+create table room(
+rid int primary key,
+rname varchar(15) not null,
+rloc varchar(20)
+);
+
+
+create table courses(
+   cid int primary key,
+   cname varchar (15) not null,
+    rid int,
+    fid int,
+    foreign key(rid) references room(rid) on delete set null,
+    foreign key(fid) references faculty(fid) on delete set null
+   );
+   
+insert into faculty (fid, fname, sp_skill1, sp_skill2) values
+     (10, 'Amol', 'Database', 'Java'),
+    (11, 'Asha', 'Java', 'MySQL'),
+    (12, 'Kiran', 'CPP', 'database'),
+    (13, 'Seeta', 'MySQL', 'database');
+	
+insert into room (rid, rname, rloc) values
+    (100, 'Jasmin', '1st floor'),
+   (101, 'Rose', '2nd floor'),
+   (105, 'Lotus', '1st floor'),
+    (103, 'Mogra', '1st floor');
+	
+
+insert into courses (cid, cname, rid, fid) values
+     (121, 'DBDA', 100, 10),
+    (131, 'DAC', 101, null),
+     (141, 'DTISS', null, null),
+    (151, 'DOIT', 105, 12);
+	
+	
+1.List all rooms which are not allocated to any courses.
+ select* from
+     room r
+     left join courses c
+    on r.rid=c.cid
+    where c.cid is null;
+	
+select *
+    from room
+     where rid not in (select rid from courses where rid is not null);
+
+
+2. List all rooms which are allocated or not allocated to any courses. List rid, rname,
+cid,cname
+Expected Output
++--------+-----------+----------+------------+
+| rid     | rname   | cid       | cname   |
++--------+-----------+----------+------------+
+| 100   | Jasmin  |  121     | DBDA     |
+| 101   | Rose      |  131     | DAC       |
+| 103   | Mogra   | NULL   | NULL     |
+| 105   | Lotus     |  151     | DIOT     |
++--------+-----------+----------+-------------+
+select r.rid, r.rname, c.cid, c.cname
+     from room r
+    left join courses c on r.rid = c.rid;
+	
+ select r.rid, r.rname,
+   (select c.cid from courses c where c.rid = r.rid) as cid,
+    (select c.cname from courses c where c.rid = r.rid) as cname
+   from room r;
+
+
+3. Display courses and faculty assigned to those courses whose special skill is
+database.
+ select c.cid, c.cname, f.fid, f.fname, f.sp_skill1, f.sp_skill2
+     from courses c
+   join faculty f on c.fid = f.fid
+    where f.sp_skill1 = 'database' or f.sp_skill2 = 'database';
+
+
+4. Display course details, faculty and room details.
+ select c.cid, c.cname, f.fid, f.fname, f.sp_skill1, f.sp_skill2, r.rid, r.rname, r.rloc
+     from courses c
+     left join faculty f on c.fid = f.fid
+     left join room r on c.rid = r.rid;
+	 
+	 
+------------------------------------------------------------------------------
+
+Assignment: 3
+
+
+1. Create a view emp view having following columns
+empno, ename, deptno, sal, comm
+empno, ename, deptno, sal, comm
+create view emp_view as
+    (select empno, ename, deptno, sal, comm from emp);
+
+2. Insert new employee having following information in the view
+(1111,'Geet',20,10000,300)
+check the data inserted in the view as well as the base table.
+insert into emp_view
+values(1111, 'Geeta', 20,10000,300);
+
+ select* from emp_view;
+ 
+  select* from emp;
+
+3. Create a view for deptno 20 as emp_v20 having following
+columns. This view should contain rows from dept20
+only empno, ename, deptno, job.
+create view emp_v20 as
+    (select empno, ename, deptno, job from emp where deptno=20);
+   
+4. Insert new employee in view emp_v20 having following
+information (2222,'Raj',40,'Analyst') 
+check the data inserted in the base table emp and also in
+the view.
+insert into emp_v20
+values(2222, 'Raj', 40, 'Analyst');
+
+select* from emp_v20;
+
+ select* from emp;
+
+5. Create a view for deptno 20 as new_emp_v20 having following columns
+empno, ename, deptno, job with constraint 'check option'; 
+create view new_emp_v20 as
+    select empno, ename, deptno, job from emp where deptno=20
+    with check option;
+
+
+6.  Insert below data in new_emp_v20 having following information
+(2222,'Raj',40,'Analyst')
+
+check the data inserted in the base table emp and also in the view.
+
+insert into new_emp_v20
+values(2222, 'Raj', 40, 'Analyst');
+
+select* from emp_v20;
+
+ select* from emp;
+
+7. Check the views created.
+show full tables
+    where table_type='VIEW';
+	
+------------------------------------------------------------------------------
+
+
+Assignment: 4
+
+Use Banking database to solve below queries
+1. Show **customer name, branch city, and account type**.
+select c.name, b.city, a.account_type
+from customer c
+join branch b
+on c.branch_id=b.branch_id
+join account a
+on c.customer_id=a.customer_id;
+
+2. Show **loan details with customer and branch name**.
+select l.loan_id, l.customer_id, l.loan_type, l.amount, l.status , b.branch_name
+from customer c
+join loan l
+on c.customer_id = l.customer_id
+join branch b
+on c.branch_id = b.branch_id;
+
+3. Display **customers who have accounts**.
+select c.customer_id , c.name , c.phone , c.address , c.branch_id ,a.account_type
+from customer c
+left join account a
+on c.customer_id = a.customer_id;
+
+4. Display **customers who have taken loans**.
+select c.customer_id , c.name , c.phone , c.address , c.branch_id ,l.loan_type
+from customer c
+left join loan l
+on c.customer_id = l.customer_id;
+
+5. Show **transaction amount with account type**.
+select t.amount, a.account_type
+from transactions t
+join account a
+on t.account_id=a.account_id;
+
+6. Find **customer who has maximum account balance**.
+select c.customer_id, c.name, a.balance
+from customer
+c join account a
+on c.customer_id=a.customer_id
+where balance = (select max(balance) from account);
+
+7. Find accounts with **balance greater than average balance**.
+select a1.*
+from account a1
+join account a2
+group by a1.account_id, a1.customer_id, a1.account_type, a1.balance, a1.open_date
+having a1.balance > avg(a2.balance);
+
+8. Find customers who **have taken loans**.
+select distinct c.*
+from customer c
+join loan l on c.customer_id = l.customer_id;
+
+9. Display accounts that **have transactions**.
+select distinct a.*
+from account a
+join transactions t on a.account_id = t.account_id;
+
+10. Find customers who **do not have loans**.
+select c.*
+from customer c
+left join loan l on c.customer_id = l.customer_id
+where l.customer_id is null;
