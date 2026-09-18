@@ -156,6 +156,10 @@ Copy emp table as emp_data and copy dept table as
 dept_data. Solve queries using
 Above tables
 
+CREATE TABLE emp_data AS SELECT * FROM emp;
+CREATE TABLE dept_data AS SELECT * FROM dept;
+
+
 1. Write a procedure and pass empno as a parameter. Check the
 commission in the table. If employee is 'analyst' then set
 commission to 2000 if  employee dose not earn any
