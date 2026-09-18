@@ -1,0 +1,396 @@
+Assignments – Day 4
+
+Assignment No== 1
+
+Adding constraints on existing tables.
+1. Create new table dept11 having same structure and data as that of dept table.
+ create table dept11 select * from dept;
+ 
+ 2.	Add primary key constraint on deptno. Check the table  structure.
+ alter table dept11 add primary key (deptno);
+  desc dept11;
+  
+ 3.	Create new table emp110 same as emp and store all employees working in dept 10.
+create table emp110 select * from emp where deptno = 10;
+select * from emp110;
+ 
+4.	Add primary key constraint on this table for empno. Add foreign key constraint on deptno. Check the table  structure.
+ alter table emp110 add primary key (empno);
+ 
+ alter table emp110
+add constraint fk_deptno foreign key(deptno) references 
+dept11(deptno);
+  desc emp110;
+ 
+------------------------------------------------------------------------------
+  
+  Alter Clause
+  
+1.	Consider already created employee table with schema is employee (eno ,ename, basic, incentives)
+
+
+-. Add column job in the above table. Job is the designation of an employee and it is varchar(12).
+ ALTER  TABLE  employee
+   ADD job varchar(12);
+ 
+
+- Ramesh is promoted as Head Clerk. Assign him new job in the table.
+ update employee set job = 'head clerk' where ename='Ramesh';
+
+- Sarita and Jitesh are promoted as Analyst. Make necessary changes in the table.
+update employee set job = 'Analyst' where ename='sarita' or ename='jitesh';
+
+
+- Change job to Manager for all employees other than 'Head Clerk' or 'Analyst' 
+UPDATE employee 
+SET job = 'Manager' 
+WHERE job NOT IN ('Head Clerk', 'Analyst') OR JOB IS  NULL;
+
+2.Create (If you have this table already use the same one) following vehicle_customer table with following constraints
+
+   - tid is a transaction id PK aoto_increment
+   - all other entries in the table are not null.
+   - buy_price is greater than 0.
+tid 	Custid 	Vid 	Sid	Buy_price     
+
+CREATE TABLE vehicle_customer (TID INT AUTO_INCREMENT, 
+                                CUSTID INT NOT NULL,
+								SID INT NOT NULL ,
+								Buy_price INT NOT NULL,
+								constraint pk_id primary key(TID),
+								constraint CHECK(Buy_price>0)
+							);
+							
+							
+1.Add new column by name rating with int data type in cust_vehicle table. Check the table structure.
+
+alter table vehicle_customer add column rating int; 
+ desc vehicle_customer;
+ 
+ 
+2.	Change datatype of buy_price column in already created cust_vehicle table to float.
+ALTER TABLE vehicle_customer 
+MODIFY COLUMN Buy_price FLOAT NOT NULL;
+
+
+------------------------------------------------------------------------------
+
+Subquery
+
+1.	Display all employees who earn sal more that Smith earns.
+SELECT * FROM emp 
+WHERE sal > (SELECT sal FROM emp WHERE ename = 'Smith');
+
+
+2.	Display all employees who earn sal more that Martin and Ford earn.\
+SELECT * FROM emp 
+WHERE sal > (SELECT sal FROM emp WHERE ename = 'Martin' Or 'Ford');
+
+3.	Display all employees who earn salary < Scott and salary > Adams sal.
+SELECT * FROM emp 
+WHERE sal <(SELECT sal FROM emp WHERE ename ='Scott')
+and sal > (select sal from emp where ename='adams');
+
+
+4.	Display all employees with salary > either Ward's  salary or Blake's sal.
+SELECT * FROM emp 
+WHERE sal >(SELECT sal FROM emp WHERE ename ='ward')
+or sal > (select sal from emp where ename='Blake');
+
+5.	Display all employees who earn more than average sal of dept 10.
+SELECT * FROM emp 
+WHERE sal >(SELECT avg(sal) FROM emp WHERE deptno = 10);
+
+6.	Display all employees who are working in sales department.(consider dept table and emp table)
+select*
+from emp 
+where deptno =(
+				select deptno 
+				from dept 
+				where dname='sales');
+
+7.	Display deptno, sum of salary  and min(sal) for all employees who are managers.
+select deptno , sum(sal) , min(sal) 
+from emp
+where job = 'manager'
+Group by deptno;
+
+8.	Display all employees working in the dept whose location is Chicago and are salesman.
+SELECT * 
+from emp
+where deptno IN (select deptno from dept where loc = 'Chicago')
+and job = 'salesman';
+
+9.	List all employees getting sal less than the salary of an employee whose empno is 7689.
+SELECT * FROM emp 
+WHERE sal > (SELECT sal FROM emp WHERE empno = 7698);
+
+
+10.	Write a query to display all employees reporting to mgr 7689 or 7839.
+SELECT * FROM emp WHERE mgr IN (7689, 7839);
+
+
+11.	Show the information for all employees that are in the same department as JONES, but do not show JONES.
+SELECT * 
+from emp 
+where deptno = (
+					select deptno 
+					from emp 
+					where ename = 'jones'
+				)
+		and ename != 'jones';
+	
+
+12.	Copy emp table by name emp_new_table.
+Change salary of Ford to King’s salary.
+create table emp_new_table select * from emp;
+
+update emp_new_table set sal=
+							(select sal from emp where ename='king')
+							where ename='ford';
+							
+------------------------------------------------------------------------------
+
+Correlated Subquery 
+
+1.	Write a query to display all employees earning salary more than the average salary of the department in which they work.
+SELECT * from emp e1 where e1.sal > (select avg(e2.sal)from emp e2 where e1.deptno = e2.deptno);
+
+
+2.	Find the highest-paid employee in each department
+SELECT * FROM emp e 
+WHERE sal = (SELECT MAX(sal) FROM emp WHERE deptno = e.deptno);
+ 
+
+
+3.	Find employees who earn more than at least one employee in their department
+SELECT e.ename, e.deptno, e.sal
+FROM emp e
+WHERE e.sal > ANY (SELECT e2.sal
+     FROM emp e2 
+     WHERE e2.deptno = e.deptno);
+	 
+	 
+------------------------------------------------------------------------------
+
+Solve below queries
+
+
+INSERT INTO category (cid, cname, description) VALUES
+(1, 'chips', 'very crunchy'),
+(2, 'chocolate', 'very chocolaty'),
+(3, 'snacks', 'yummy'),
+(4, 'cold drinks', 'thanda thanda cool cool');
+
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+
+INSERT INTO Product (pid, pname, qty, price, cid, sid) VALUES
+(123, 'lays', 30, 30.00, 1, 12),
+(111, 'pepsi', 40, 50.00, 4, 11),
+(134, 'nachos', 50, 50.00, 1, 12),
+(124, 'dairy milk', 40, 60.00, 2, 14),
+(125, 'pringles', 40, 60.00, 1, 14),
+(213, 'Sketch Pens', 56, 150.00, NULL, 11),
+(167, 'eraser', 90, 5.00, NULL, NULL);
+
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+INSERT INTO salesman (sid, sname, city) VALUES
+(11, 'Rahul', 'Pune'),
+(12, 'Kirti', 'Mumbai'),
+(13, 'Prasad', 'Nashik'),
+(14, 'Arnav', 'Amravati');
+
+
+1.	List all pid, pname ,cid, cname  with category chips
+SELECT p.pid, p.pname, c.cid, c.cname 
+FROM Product p
+JOIN category c ON p.cid = c.cid
+WHERE c.cname = 'chips';
+
+2.	Display all products sold by kirti
+SELECT p.* 
+FROM Product p
+JOIN salesman s ON p.sid = s.sid
+WHERE s.sname = 'Kirti';
+
+
+3.	List all salesmen who stays in city where  name starts with P or N
+SELECT * 
+FROM salesman 
+WHERE city LIKE 'P%' OR city LIKE 'N%';
+
+
+4.	Add new column in salesman table by name credit limit.
+
+ALTER TABLE salesman 
+ADD credit_limit DECIMAL(10,2);
+
+
+
+==============================================================================
+
+Mix Queries
+,
+Solve following queries
+========================
+-Display total spendings per customer.
+select customer_id , sum(amount) from orders group by customer_id;
+
+-Display Top 3 customers as per their spendings
+select customer_id, sum(amount) as Total_spendings from orders group by customer_id order by Total_spendings desc limit 3 ;
+
+-Generate Monthly sales report
+SELECT 
+    YEAR(order_date) AS Year, 
+    MONTHNAME(order_date) AS Month, 
+    COUNT(order_id) AS Total_Orders, 
+    SUM(amount) AS Total_Sales_Amount
+FROM 
+    Orders
+GROUP BY 
+    YEAR(order_date), 
+    MONTH(order_date),
+    MONTHNAME(order_date)
+ORDER BY 
+    Year DESC, 
+    MONTH(order_date) DESC;
+
+
+
+-Display customer_id, name and city of customers who ordered
+ more than 3 times
+ SELECT 
+    c.customer_id, 
+    c.name, 
+    c.city
+FROM 
+    Customers c
+JOIN 
+    Orders o ON c.customer_id = o.customer_id
+GROUP BY 
+    c.customer_id, 
+    c.name, 
+    c.city
+HAVING 
+    COUNT(o.order_id) > 3;
+
+ 
+-Find customers who spent more than ₹2000 as a total amount.
+SELECT customer_id, SUM(amount) AS total_spending
+FROM Orders
+GROUP BY customer_id
+HAVING SUM(amount) > 2000;
+
+
+-Count the number of orders placed by each customer
+SELECT 
+    customer_id, 
+    COUNT(order_id) AS total_orders
+FROM 
+    Orders
+GROUP BY 
+    customer_id
+ORDER BY 
+    total_orders DESC;
+
+
+-Find the highest single order amount
+SELECT MAX(amount) AS highest_order_amount 
+FROM Orders;
+
+-List customers who placed orders in February
+SELECT DISTINCT 
+    c.customer_id, 
+    c.name, 
+    c.city
+FROM 
+    Customers c
+JOIN 
+    Orders o ON c.customer_id = o.customer_id
+WHERE 
+    MONTH(o.order_date) = 2;
+
+
+-Find the second highest order amount
+SELECT DISTINCT amount 
+FROM Orders
+ORDER BY amount DESC
+LIMIT 1 OFFSET 1;
+
+
+-Identify the customer with the highest total spending
+SELECT 
+    c.customer_id, 
+    c.name, 
+    SUM(o.amount) AS total_spent
+FROM 
+    Customers c
+JOIN 
+    Orders o ON c.customer_id = o.customer_id
+GROUP BY 
+    c.customer_id, 
+    c.name
+ORDER BY 
+    total_spent DESC
+LIMIT 1;
+
+
+-Rank customers based on their total spending
+SELECT 
+    c.customer_id, 
+    c.name, 
+    SUM(o.amount) AS total_spent,
+    DENSE_RANK() OVER (ORDER BY SUM(o.amount) DESC) AS customer_rank
+FROM 
+    Customers c
+JOIN 
+    Orders o ON c.customer_id = o.customer_id
+GROUP BY 
+    c.customer_id, 
+    c.name;
+
+
+-Identify duplicate order amounts
+SELECT amount, COUNT(amount) AS occurrence
+FROM Orders
+GROUP BY amount
+HAVING COUNT(amount) > 1;
+
+
+-Find orders with amount greater than the average order amount
+SELECT * 
+FROM Orders
+WHERE amount > (SELECT AVG(amount) FROM Orders);
+
+
+-Get the latest order for each customer
+SELECT o1.*
+FROM Orders o1
+WHERE o1.order_date = (
+    SELECT MAX(o2.order_date) 
+    FROM Orders o2 
+    WHERE o2.customer_id = o1.customer_id
+);
+
+
+
+-Find customers who placed more than 2 orders
+ SELECT 
+    c.customer_id, 
+    c.name, 
+    COUNT(o.order_id) AS total_orders
+FROM 
+    Customers c
+JOIN 
+    Orders o ON c.customer_id = o.customer_id
+GROUP BY 
+    c.customer_id, 
+    c.name
+HAVING 
+    COUNT(o.order_id) > 2;
+
