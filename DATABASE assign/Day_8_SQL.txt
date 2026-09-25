@@ -1,0 +1,65 @@
+1. Write a query to add primary key constraint on emp table and check clustered index.
+ALTER TABLE emp 
+ADD PRIMARY KEY (EMPNO);
+
+SHOW INDEX FROM emp;
+
+2. Write a query to create index on deptno. Check created index.
+CREATE INDEX idx_deptno ON emp (DEPTNO);
+
+SHOW INDEX FROM emp;
+
+3. Delete all created indexes.
+
+ALTER TABLE emp DROP INDEX idx_deptno;
+
+ALTER TABLE emp DROP PRIMARY KEY;
+
+==============================================================================
+
+Extra Assignments
+
+1.The HR department wants to know the names of all the employees who were hired after Blake. Create a query to display the name and hire date of any employee hired after employee  Blake.
+SELECT ename, hiredate 
+FROM emp 
+WHERE hiredate > (SELECT hiredate FROM emp WHERE ename = 'BLAKE');
+
+
+2  Write a query to get  year, and number of employees joined each year.
+SELECT EXTRACT(YEAR FROM hiredate) AS join_year, COUNT(empno) AS no_of_employees
+FROM emp
+GROUP BY EXTRACT(YEAR FROM hiredate)
+ORDER BY join_year;
+
+
+3 Write a query to display all employees with experience more than 43 years.
+SELECT ename, hiredate, 
+       FLOOR(DATEDIFF(NOW(), hiredate) / 365.25) AS experience_years
+FROM emp
+WHERE hiredate < DATE_SUB(NOW(), INTERVAL 43 YEAR);
+
+
+
+4 Display 3rd highest salary.
+SELECT DISTINCT sal 
+FROM emp 
+ORDER BY sal DESC 
+LIMIT 1 OFFSET 2;
+
+
+
+
+5 Write a query which will display all employees working in sales department.
+SELECT e.* 
+FROM emp e
+JOIN dept d ON e.deptno = d.deptno
+WHERE d.dname = 'SALES';
+
+
+6 Write a query to display year if more than 2 employees are hired in that year.
+SELECT EXTRACT(YEAR FROM hiredate) AS join_year, COUNT(empno) AS employee_count
+FROM emp
+GROUP BY EXTRACT(YEAR FROM hiredate)
+HAVING COUNT(empno) > 2
+ORDER BY join_year;
+

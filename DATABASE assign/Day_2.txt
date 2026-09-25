@@ -1,0 +1,376 @@
+Assignments – Day 2
+Solve the following queries using emp, dept and
+salgrade tables.(Queries on built-in functions, sorting
+,distinct etc)
+
+
+
+1. Display hiredate from emp table in different formats.
+SELECT ename, hiredate , date_format(hiredate, '%d-%m-%y')
+FROM emp;
+,
+SELECT ename, hiredate , date_format(hiredate,C)
+FROM emp;
+
+2. Write a query to get the  Mondays from hiredate in emp tables.
+SELECT ename, hiredate 
+FROM emp 
+WHERE WEEKDAY(hiredate) = 0;
+
+3. Write a query to get the current date in the following format. Sample date : 04-sep-2014
+Output : September 4, 2014
+SELECT DATE_FORMAT(current_date(), '%M %e, %Y');
+
+4.  Write a query to calculate your age in years.
+SELECT datediff(curdate(), '2004-11-23')/365 as age;
+
+5. Find all employees whose sal is divisible by 3 .
+SELECT ename, sal from emp 
+where mod(sal, 3) =0;
+
+6. Write query to display name followed by 4 stars followed by sal .  e.g SMITH****800   
+There should be 4 * with each name.
+SELECT CONCAT(ename, '****', sal) AS employee_salary_info
+FROM emp;
+
+7. Display email as ename followed by mycompany.com.  e.g SMITH@mycompany.com
+SELECT ename
+CONCAT(ename,'@mycompany.com')
+FROM emp;
+
+8. Display ename and it&#39;s length for all employees. e.g SMITH 5
+SELECT concat (ename,' ' ,length(ename)) as 'ename_length'
+from emp;
+
+10. Display name starting with upper case letter and job starting with upper case letter for all
+employees.
+SELECT 
+    CONCAT(UPPER(SUBSTRING(ename, 1, 1)), LOWER(SUBSTRING(ename, 2))) AS formatted_name,
+    CONCAT(UPPER(SUBSTRING(job, 1, 1)), LOWER(SUBSTRING(job, 2))) AS formatted_job
+FROM emp;
+
+employees.
+11. Display first 3 characters of ename in lower case and rest everything in upper case.
+SELECT 
+CONCAT(
+    LOWER(SUBSTRING(ename, 1, 3)), 
+    UPPER(SUBSTRING(ename, 4))
+) AS formatted_name
+FROM emp;
+
+12. Display last 3 letters of name.
+SELECT RIGHT(ename, 3) AS last_three_letters
+FROM emp;
+
+13. Generate an email-id for all employees and display. Email id is generated as follows
+    first 3 letters of name in lower case + last 2 letters of job in lower case + @cdac.com
+    e.g. name=SMITH   job=CLERK  
+    email-id = smirk@cdac.com
+SELECT 
+CONCAT(
+    LOWER(SUBSTRING(ename, 1, 3)), 
+    LOWER(SUBSTRING(job,2)),
+	'@cdac.com'
+) AS email_id
+FROM emp;
+
+14. List all employees having experience greater than 40 years.
+SELECT ename, hiredate, (datediff(curdate(), hiredate)/365) as'experience'
+from emp
+where (datediff(curdate(), hiredate)/365)> 40 ;
+
+15. Copy data of emp table in any other table and fire a  query on new table, so that the data will not
+get affected. Increase the salary by 10% in the database for all employees having experience
+more than 40 years
+
+CREATE TABLE emp_backup AS 
+SELECT * FROM emp;
+
+UPDATE emp_backup
+SET sal = sal * 1.10
+WHERE TIMESTAMPDIFF(YEAR, hiredate, CURDATE()) > 40;
+
+
+16. Display string “Hello” followed by name having first letter of name in capital, followed by ! for all 
+employees  who earned commission.
+select concat('Hello',UPPER(substring(ename,1,1)),LOWER(substring(ename,2)),'!' )from emp where comm != 0;
+
+17. Display all employee names from emp table in the following format.
+   Hello Allen .
+
+select concat('Hello',' ',UPPER(substring(ename,1,1)),LOWER(substring(ename,2)) ) as enames from emp;
+
+18. Write a query to display name is a job.
+    e.g SMITH is a clerk
+    job should be in small letters
+
+select concat(ename, ' is a ', LOWER(job)) as Employee_job from emp;
+
+
+19. Display all columns by separating with comma.
+SELECT CONCAT_WS(', ', empno, ename, job, mgr, hiredate, sal, comm, deptno) AS all_columns_joined
+FROM emp;
+
+20. Write a query which will display name, department no and date of joining of   all employees
+joined between  January 1, 1981 and March 31, 1983. Sort it based on date of   joining
+(ascending).
+SELECT ename, deptno, hiredate
+FROM emp
+WHERE hiredate BETWEEN '1981-01-01' AND '1983-03-31'
+ORDER BY hiredate ASC;
+
+==========================================================================================================================================
+
+Assignment =2
+
+
+Solve the following queries using emp, dept and
+salgrade tables.
+
+Try LIKE operator as well as REGEXP_LIKE() as well for
+below queries.
+
+
+1. Find all employees with name having L at 3rd position and E at
+second last position.
+
+SELECT * 
+FROM emp
+WHERE ename REGEXP '^..L.*E.$';
+
+SELECT * 
+FROM emp
+WHERE ename LIKE '__L%E_';
+
+2. Find all employees with name not starting with A or M
+SELECT * 
+FROM emp
+WHERE ename NOT LIKE 'A%' AND ename NOT LIKE 'M%';
+
+3. Display all employees with sal &gt;1000 and sal&lt;3000 and job has A
+at starting position and ends with T.
+SELECT * from emp 
+where sal>1000 and sal<3000 and regexp_like (job,'^A.*T$');
+
+4. Write a query  to display empno, ename, sal, commission,
+increased sal by 10% and for all employees  whose  name starts
+with A,M or S.
+SELECT empno, ename, sal, comm, (sal * 1.10) AS salary_increased 
+FROM emp 
+WHERE REGEXP_LIKE(ename, '^[AMS]');
+
+
+5. Display all employees whose name starts with A and ends with
+either N or S, or works in dept 10.
+SELECT * 
+FROM emp 
+WHERE REGEXP_LIKE(ename, '^A.*[NS]$') 
+   OR deptno = 10;
+   
+6. List all departments whose name has at least 8 characters.
+select dname from dept where length(dname) >= 8 ;
+
+7. List all departments whose name has at least 8 characters.
+select dname from dept where length(dname) >= 8 ;
+
+8. List the details of the employee , whose names start with ‘A’
+and end with ‘S’ or whose names contains N as the second or
+third character, and end with either ‘N’ or ‘S’.
+SELECT * 
+FROM emp 
+WHERE REGEXP_LIKE(ename, '^A.*S$') OR  REGEXP_LIKE(ename, '(.N|..N).*(N|S)$');
+
+9. List employees whose name starts with either 'A' or 'S' in dept
+SELECT * 
+FROM emp 
+WHERE REGEXP_LIKE(ename, '^[AS]') 
+  AND deptno = 20;
+  
+10.List all employees with job starting with C , E at 3rd position
+and  ending with K.
+select * from emp where REGEXP_LIKE(job,'^C.E.*K$');
+
+11. To list all employees with job containing L at third position
+and M at third last position.
+select * from emp where REGEXP_LIKE(job,'^..L.*M..$');
+
+12. To list all employees with comm is null and name starts with ‘S’
+select * from emp where comm is null and REGEXP_LIKE(ename,'^S.*$');
+
+13. List employees in all dept whose salary not in the range of
+2000 to 3000 with the job which is having a  string   called 'MAN';
+at the end.
+
+select * from emp 
+where sal not between '2000' and '3000' And REGEXP_LIKE(job,'^.*MAN$');
+
+
+14. List all the employee whose name does not end with 'S' in dept
+20 and 30?\
+SELECT * 
+FROM emp 
+WHERE deptno IN (20, 30) 
+  AND REGEXP_LIKE(ename, '[^S]$');
+
+
+15. Display list of all employees whose name ends with ER.
+SELECT * 
+FROM emp 
+WHERE REGEXP_LIKE(ename, 'ER$');
+
+
+16. To find all employees with name starting with either M or A and
+last character as either R or E..
+SELECT * 
+FROM emp 
+WHERE REGEXP_LIKE(ename, '^[MA].*[RE]$');
+
+17. Find names having exactly five letters
+SELECT *
+FROM emp 
+WHERE name REGEXP &#39;^[A-Za-z]{5}$;
+
+
+18. To find all employee with name starting with A or M and ending
+with E.
+SELECT * 
+FROM emp 
+WHERE REGEXP_LIKE(ename, '^[AM].*E$');
+
+19.Find all employees with name starting with M, having  L at 3rd
+position and ends with R.
+SELECT * 
+FROM emp 
+WHERE REGEXP_LIKE(ename, '^M.L.*R$');
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+Assignment 3
+
+Solve the queries using emp, dept and salgrade table (fetching data from multiple tables
+without joins)
+
+1.Write a query to display empno, ename, deptno, dname, loc, sal, salgrade for all employees working as managers. 
+
+SELECT 
+    e.empno,
+    e.ename,
+    e.deptno,
+    d.dname,
+    d.loc,
+    e.sal,
+    s.grade AS salgrade
+FROM 
+    emp e,
+    dept d,
+    salgrade s
+WHERE 
+    e.deptno = d.deptno
+    AND e.sal BETWEEN s.losal AND s.hisal
+    AND UPPER(e.job) = 'MANAGER';
+	
+2. Write a query to display empno, ename, deptno, dname, loc, sal, salgrade for all employees joined in the year 1981.  
+SELECT 
+    e.empno,
+    e.ename,
+    e.deptno,
+    d.dname,
+    d.loc,
+    e.sal,
+    s.grade AS salgrade
+FROM 
+    emp e,
+    dept d,
+    salgrade s
+WHERE 
+    e.deptno = d.deptno
+    AND e.sal BETWEEN s.losal AND s.hisal
+    AND YEAR(e.hiredate) = 1981;
+	
+3.Display empno, ename, deptno, dname, sal, salgrade for all employees joined on Tuesday.  
+Dayofweek(curdate())----will give day 1:Sunday, 2:Monday etc
+SELECT 
+    e.empno,
+    e.ename,
+    e.deptno,
+    d.dname,
+    e.sal,
+    s.grade AS salgrade
+FROM 
+    emp e,
+    dept d,
+    salgrade s
+WHERE 
+    e.deptno = d.deptno
+    AND e.sal BETWEEN s.losal AND s.hisal
+    AND DAYOFWEEK(e.hiredate) = 3;
+	
+	
+4. Write a query to display empno, ename, deptno, dname, loc, sal, salgrade for all employees joined in the year 1981 and earning no commission. 
+SELECT 
+    e.empno,
+    e.ename,
+    e.deptno,
+    d.dname,
+    d.loc,
+    e.sal,
+    s.grade AS salgrade
+FROM 
+    emp e,
+    dept d,
+    salgrade s
+WHERE 
+    e.deptno = d.deptno
+    AND e.sal BETWEEN s.losal AND s.hisal
+    AND YEAR(e.hiredate) = 1981
+    AND (e.comm IS NULL OR e.comm = 0);
+	
+
+----------------------------------------------------------------------------------------------------------------
+
+Assignment : Queries on BankingDB
+
+1. Display **customer names in ascending order**
+SELECT name 
+FROM customer 
+ORDER BY name ASC;
+
+2. Show accounts opened **after 2023-03-01**.
+SELECT * 
+FROM account 
+WHERE open_date > '2023-03-01';
+
+3. Show **distinct account types**
+SELECT DISTINCT account_type 
+FROM account;
+
+4. Display transactions **sorted by amount (descending)**
+SELECT * 
+FROM transactions 
+ORDER BY amount DESC;
+
+5. Display total balance in the bank.
+SELECT SUM(balance) AS total_bank_balance 
+FROM account;
+
+6. Display customers whose **name starts with 'R'**
+SELECT * 
+FROM customer 
+WHERE name LIKE 'R%';
+
+7. Show customers whose **phone number ends with 5**.
+SELECT * 
+FROM customer 
+WHERE phone LIKE '%5';
+
+8. Find **maximum account balance**.
+SELECT * 
+FROM account 
+ORDER BY balance DESC 
+LIMIT 1;
+
+9.Find **minimum transaction amount**
+SELECT MIN(amount) AS min_transaction_amount 
+FROM transactions;
