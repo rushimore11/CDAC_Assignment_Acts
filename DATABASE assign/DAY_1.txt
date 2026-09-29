@@ -1,0 +1,323 @@
+++++++ ASSIGNMENT NO=1 ++++++++++++++++++++++
+
+
+
+CREATE DATABASE batch2;
+
+USE batch2;
+
+CREATE TABLE VEHICLE( VID INT,VNAME VARCHAR(50),PRICE INT,DISCOUNT INT ,MILAGE INT,CATEGORY VARCHAR(50),DETAILS VARCHAR(100));
+
+DESC TABLE VEHICLE;
+
+INSERT INTO VEHICLE (VID,VNAME,PRICE,DISCOUNT,MILAGE,CATEGORY,DETAILS)VALUES
+		(1,"Active",80000,10,35,"Bike","Two-wheeler. Sturdy. Milage 30 km"),
+		(2,"Santro" ,95000,20,20,"Car","Product of Hyandai"),
+		(3, "Yamaha", 160000, 5, 70, "Bike", "Sturdy7 and good milege"),
+		(4, "i-10", 300000, 8, 18, "Car", "Good small car"),
+		(5, "Wagen-R", 250000, 10, 25, "Car", "Good Milege Car"),
+		(6, "Hero Splendour", 75000, 9, 65, "Bike", "Best bike"),
+		(7, "Royal Enfild", 190000, 5, 40, "Bike", "a royal bike");
+
+select * from vehicle;
+
+
+CREATE TABLE Customer(custid INT,cname VARCHAR(50),location VARCHAR(50));
+
+INSERT INTO Customer (custid, cname, location ) values
+	(1, "Nilima", "Pimpri"),
+	(2, "Ganesh", "Pune"),
+	(3, "Kishor", "Kothrud"),
+	(4, "Priya", "Aundh");
+
+
+
+
+CREATE TABLE Salesman(sid INT,sname VARCHAR(50),city VARCHAR(50) , experience INT);
+
+1.Display vid, vname, price and details from table vehicle with column heading as Vehicle id, vehicle name, price, discount and details.
+
+SELECT VID AS "Vehicle ID",VNAME as "Vehicle Name",PRICE as "Price",DISCOUNT as "Discount", DETAILS As "Details" FROM VEHICLE ;
+
+2.List all salesman working in Pune and having experience >5 years.
+
+SELECT * FROM Salesman
+WHERE city= "Pune" AND experience > 5;
+
+
+3. Add some new customers
+  'Geeta' with custid 5 and area as 'Pimpri'.
+  'Raj' with custid 6 and area 'Aundh'
+  'Yash' with custid 7 and area 'Aundh
+
+
+
+INSERT INTO Customer (custid, cname, location ) values
+	(5, "Geeta", "Pimpri"),
+	(6, "Raj", "Aundh"),
+	(7, "Yash", "Aundh");
+
+
+4. Display information of vehicle, Royal Enfild.
+
+SELECT * FROM Vehicle
+WHERE vname = "Royal Enfild";
+
+5. Display information of all Bikes.
+
+SELECT * FROM Vehicle
+WHERE category = "Bike";
+
+
+6. Display vid, vname, price, details and total price for each vehicle
+
+SELECT vid , vname, price ,details , price - (price *(discount/100)) AS "Total Price" FROM vehicle;
+
+7.Display information of vehicle i-10
+
+SELECT * FROM vehicle
+WHERE
+vname="i-10";
+
+8.Display all vehicles whose price is less than 100000.
+
+SELECT * FROM vehicle
+WHERE
+price <100000;
+
+9.Display all the information of salesmen having experience more than 5 years.
+
+SELECT * FROM salesman
+WHERE
+experience > 5;
+
+10.Create a copy of table customer and salesman by name customer1 and salesman1.
+
+CREATE TABLE customer1
+AS SELECT * FROM customer;
+
+CREATE TABLE salesman1
+AS SELECT * FROM salesman;
+
+11.Delete customer from area Aundh whose name is Priya.
+
+DELETE FROM customer
+WHERE location ="Aundh" AND cname = "Priya";
+
+12. Delete customer from Pimpri area.
+
+DELETE FROM customer
+WHERE location ="Pimpri";
+
+13. Delete entire table Salesman1
+
+DROP TABLE Salesman1;
+
+-------------------------------------------------------------------------------------------------------------------
+
+
+
+++++++++++ ASSIGNMENT NO=2 ++++++++++++++++++
+
+
+
+
+
+CREATE TABLE employee (eno id,ename varchar(50),basic int,incentive int);
+
+ INSERT INTO employee(eno,ename,basic,incentive) values
+	(1, "Rajesh", 20000, 1500),
+	(2, "Sarita", 25000, 1000),
+	(3, "Meera", 15000, 3000),
+	(4, "Jitesh", 30000, 500),
+	(5, "Ramesh", 12000, 3000);
+
+1. Meera leaves the company. Make necessary changes in table.
+
+DELETE  FROM employee
+WHERE ename = "MEERA";
+
+
+Write a query to change basic salary of Rajesh to 25000 and incentives to 18000.
+
+UPDATE employee
+SET basic = 25000 AND incentive = 18000
+WHERE ename = "Rajesh";
+
+
+2. Ramesh is promoted as Head Clerk and now earns salary 60000. Write a query.
+UPDATE employee
+SET basic = 60000
+WHERE ename ="Rajesh";
+
+3. Change incentive of Jitesh to 1000
+UPDATE employee
+SET incentive = 1000
+WHERE ename ="Jitesh";
+
+
+
+++++++++++ ASSIGNMENT NO=3 ++++++++++++++++++
+
+ Use Emp, Dept and Salgrade  tables to solve following queries.
+
+List all records with sal > 2000 and comm>200
+ SELECT * FROM emp
+WHERE SAL >2000 AND COMM >200;
+
+2. List all records where job=’Clerk’ or sal>2000
+SELECT * FROM emp
+WHERE job ="Clerk" AND SAL >2000;
+
+3.List all the records with sal=1250 or 1100
+SELECT * FROM emp
+WHERE SAL =1250 OR 2000;
+
+
+4. List all employees with sal>1250 and <2850
+SELECT * FROM emp
+WHERE SAL > 1250 AND  SAL< 2850;
+
+5. Retrieve the details (Name, Salary and dept no) of the emp who are working in department no 20
+SELECT ename, sal, deptno
+FROM emp
+WHERE deptno = 20;
+
+6. Display all employees who have joined after 9th june 81.
+SELECT * FROM emp
+WHERE HIREDATE > 1981-06-09;
+
+7. Display empno, empname, sal, comm and total salary
+SELECT empno, ename , sal, comm , sal + ifnull (comm, 0) "Total SALARY"
+FROM emp;
+
+8. Display all jobs from emp table. Display should not give duplicate job names.
+SELECT DISTINCT JOB
+FROM emp;
+
+9. Display all unique  deptnos in which employees are working.
+SELECT DISTINCT deptno
+from Emp;
+
+
+10. Implement following using case statement. Use data from emp database.
+If comm is null ‘need improvement’ If <500 “ok” If >=500 and < 1000 ‘good' ‘Excellent'
+
+
+ SELECT
+    ->     empno,
+    ->     ename,
+    ->     comm,
+    ->     CASE
+    ->         WHEN comm IS NULL THEN 'need improvement'
+    ->         WHEN comm < 500 THEN 'ok'
+    ->         WHEN comm >= 500 AND comm < 1000 THEN 'good'
+    ->         ELSE 'Excellent'
+    ->     END AS performance_rating
+    -> FROM
+    ->     emp;
+
+
+11.List the employees in dept 20 and 30 who did not get any commission.
+
+SELECT * FROM EMP
+WHERE deptno =20 OR deptno = 30 AND comm = NULL;
+
+12. Display all employees with sal >2000 and job is either clerk or Salesman.
+SELECT * From emp
+WHERE Sal > 2000 AND job = "clerk" OR "Salesman";
+
+13. Display all employees who works in either dept 10 or 30 and joined in year 1982
+SELECT *
+FROM emp
+WHERE deptno IN (10, 30)
+  AND YEAR(hiredate) = 1982;
+
+14. Display the emp details who do not have manager
+SELECT * From emp
+WHERE job != "manager" ;
+
+15. Display all employees who joined between years 1981 to 1983
+SELECT *
+FROM emp
+WHERE hiredate BETWEEN '1981-01-01' AND '1983-12-31';
+
+
+16.Create new table emp10 same as emp without any data. Check it's structure.
+CREATE TABLE emp10 LIKE emp;
+CREATE TABLE emp10 AS
+SELECT * FROM emp WHERE 1 = 0;
+DESCRIBE emp10;
+
+17.Display the emp details who do not have manager.
+SELECT *
+FROM emp
+WHERE mgr IS NULL;
+
+18. List all managers working in dept 10.
+SELECT *  FROM emp
+WHERE deptno = 10 AND job = "manager";
+
+
+
+
+
+
+----------------------------------------------
+Banking Database
+
+---------------------------------------------
+
+Show all customers
+SELECT * FROM customer;
+
+2. Show customer account details
+SELECT * FROM  account;
+
+3. Show all accounts with balance > 60000
+SELECT * FROM  account
+WHERE balance > 60000;
+
+4. Show all **branches** available in the bank.
+SELECT DISTINCT branch
+FROM branch;
+
+5. Display **name and phone number** of customers.
+SELECT name, phone  From customer;
+
+6. Show all **Savings accounts**.
+SELECT * 
+FROM Account 
+WHERE account_type = 'Savings';
+
+7. Show customers living in **Pune**.
+SELECT * 
+FROM Customer 
+WHERE address = 'Pune';
+
+8. Display loan types available in the bank
+SELECT DISTINCT loan_type 
+FROM Loan;
+
+9. Show accounts with **balance between 40,000 and 80,000**.
+SELECT * 
+FROM Account 
+WHERE balance BETWEEN 40000 AND 80000;
+
+10. Display loans with **status = 'Approved'**.
+SELECT * 
+FROM Loan 
+WHERE status = 'Approved';
+
+11. Show accounts with **account type = 'Savings' AND balance > 50000
+SELECT * 
+FROM Account 
+WHERE account_type = 'Savings' 
+  AND balance > 50000;
+
+12. Display customers **not from Pune**.
+
+SELECT * 
+FROM Customer 
+WHERE address != 'Pune';
+

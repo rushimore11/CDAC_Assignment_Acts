@@ -1,0 +1,105 @@
+Assignemt 1 -
+
+
+Solve following assignments. Use movie collection
+
+1. display all movies with rating=4
+db.movies.find({rating:4})
+
+2. display all movies with rating=3 and price=200 
+ db.movies.find({rating:4 , price : 200})
+  
+3. display all movies with rating&gt;3 and price=540 
+db.movies.find({rating:{$gt:3}, price : 540})
+
+4. display all movies with rating&gt;3 and price&gt;300
+db.movies.find({rating:{$gt:3}, price : {$gt:300}})
+
+5. display all movies with price &gt; 200 and &lt; 400
+db.movies.find({price:{$gt:200,$lt:400}})
+
+6. display all movies with price is 200 or 540 or 400
+db.movies.find({price :{$in:[200,400,540]}})
+
+7. display all movies with price not equal to 200 nor 540  nor 400
+db.movies.find({ price: { $nin: [200, 400, 540] } })
+
+8. display all movies with rating=4 or price&gt;300
+db.movies.find({$or:[{rating: 4 },{price: { $gt: 300 }}]})
+
+9. display all movies with price not &gt; 200 and &lt; 400
+db.movies.find({price:{$lt:200, $lt:400}})
+
+10. display all movies with rating is odd
+db.movies.find({rating:{$mod:[2,1]}})
+
+
+-----------------------------------------------------------------------------
+
+Add 6 documents where actor is Amitabh and solve the
+following queries.
+
+11. display all movies in which amitabh has acted
+ db.movies.find({actor:'amitabh'})
+
+12. display all movies in which amitabh has acted display in ascending order of price.
+ db.movies.find({actor:{$in:['amitabh','Amitabh']}}).sort({price:1})
+
+13. display all movies in which amitabh has acted display in descending order of price
+db.movies.find({actor:{$in:['amitabh','Amitabh']}}).sort({price:-1})
+
+14. display all movies in which amitabh has acted display only 1st document
+db.movies.find({actor:{$in:['amitabh','Amitabh']}}).limit(1)
+
+15. display all movies in which amitabh has acted display only 1st  3 documents
+db.movies.find({actor:{$in:['amitabh','Amitabh']}}).limit(3)
+
+16. display all movies in which amitabh has acted display only 5 6th and 7 th
+ db.movies.find({actor:{$in:['amitabh','Amitabh']}}).skip(4).limit(3)
+
+17. display all movies with number of actors=3
+ db.movies.find({actor:{$size:3}})
+
+18. Display top 5 highest rating movies. Display  lowest 3 rating movies.
+ db.movies.find({}, {name:1, rating:1, _id:0}).sort({rating:-1}).limit(5)
+
+19. For movie &quot;kahani 2&quot; change rating to 5.
+ db.movies.updateOne({name:'kahani'}, {$set: {rating:5}})
+
+20. Change price =400 and increase rating by 2 for all movies with name Kahani in it.
+db.movies.updateMany({}, {$set: { price: 400 }, $inc: { rating: 2 } })
+
+21. Decrease price of all movies by Rs. 40.
+db.movies.updateMany({ price: { $type: "number" } },{$inc:{price:-40}})
+
+22. Increase the price by 10% of price.
+db.movies.updateMany({price:{$type:"number"}},{$mul:{price:1.1}})
+
+------------------------------------------------------------------------------
+Insert 6 documents in emp collection having eno,ename,sal,comm,desg in
+the field list. desg is designation of employee.
+Create documents having following info
+Ajit(Manager):101:no comission column sa1 =20000
+Sagar(analyst):102:comission 0 sal=15000
+Sakshi(programmer):103:no commission column sal=35000
+Rupali(manager):104:no commission column sal=29000
+Maya:(Accountant)105:commission 1000 sal=32000
+Amol(analyst):106:commission 700 sal=38000
+
+1. Update salary of all employees by giving an increment of Rs. 4000.
+db.emp.updateMany({},{$inc:{sal:4000}})
+
+2 .Update designation of an employee named “Ajit ” from manager to director.
+db.emp.updateOne({ename:'Ajit'},{$set:{desg:'manager'}})
+
+3..Update designation of an employee having Employee Id as “101”
+db.emp.updateOne({eno:101},{$set:{desg:'Programmer'}})
+
+4. Count analysts in the collection.
+db.emp.find({desg:'analyst'}).count()
+
+5. display all documents in ascending order of sal
+db.emp.find().sort({sal:-1})
+
+6. display name and salary of employee earning max sal
+db.emp.find({},{ename:1,sal:1,comm:1,desg:1}).sort({sal:-1}).limit(1)

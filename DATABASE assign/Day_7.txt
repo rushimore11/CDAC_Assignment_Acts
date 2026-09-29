@@ -1,0 +1,354 @@
+
+Assignments – Day 7
+
+Common Table Expressions::
+
+1. Write CTE having recursive function which display first 15 even numbers.
+WITH RECURSIVE EvenNumbers AS (
+    SELECT 2 AS num, 1 AS count
+    UNION ALL
+    SELECT num + 2, count + 1
+    FROM EvenNumbers
+    WHERE count < 15
+)
+SELECT num FROM EvenNumbers;
+
+
+2. Write a query to find the average salary for each department and then list the names of
+employees who earn more than the avg sal of their respective departments.
+WITH DeptAvg AS (
+    SELECT deptno, AVG(sal) AS avg_sal
+    FROM emp
+    GROUP BY deptno
+)
+SELECT e.ename, e.sal, e.deptno, d.avg_sal
+FROM emp e
+JOIN DeptAvg d ON e.deptno = d.deptno
+WHERE e.sal > d.avg_sal;
+
+
+
+3. Write a query to display empno, ename, deptno and sum(sal)  using CTE.
+WITH DeptSum AS (
+    SELECT deptno, SUM(sal) AS total_sal
+    FROM emp
+    GROUP BY deptno
+)
+SELECT e.empno, e.ename, e.deptno, d.total_sal
+FROM emp e
+JOIN DeptSum d ON e.deptno = d.deptno;
+
+
+
+4. Write a query to display top 2 departments having avg salay. Display deptno, dname and avg sal.
+WITH DeptAvgSal AS (
+    SELECT d.deptno, d.dname, AVG(e.sal) AS avg_salary
+    FROM dept d
+    JOIN emp e ON d.deptno = e.deptno
+    GROUP BY d.deptno, d.dname
+)
+SELECT deptno, dname, avg_salary
+FROM DeptAvgSal
+ORDER BY avg_salary DESC
+LIMIT 2;
+
+
+-----------------------------------------------------------------------------
+Cursors::
+1. Write a cursor to increment salary of all employees by 5% if
+employee has joined in year 1981.
+DELIMITER //
+
+CREATE PROCEDURE Increment1981Salary()
+BEGIN
+    DECLARE v_empno INT;
+    DECLARE done INT DEFAULT FALSE;
+    
+    DECLARE emp_cursor CURSOR FOR 
+        SELECT empno FROM emp WHERE YEAR(hiredate) = 1981;
+        
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN emp_cursor;
+
+    read_loop: LOOP
+        FETCH emp_cursor INTO v_empno;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        UPDATE emp 
+        SET sal = sal * 1.05 
+        WHERE empno = v_empno;
+    END LOOP;
+
+    CLOSE emp_cursor;
+END //
+
+DELIMITER ;
+
+
+
+
+2. Write a cursor which will handle all rows having deptno 20.
+
+DELIMITER //
+
+CREATE PROCEDURE ProcessDept20()
+BEGIN
+    DECLARE v_ename VARCHAR(50);
+    DECLARE v_sal DECIMAL(10,2);
+    DECLARE done INT DEFAULT FALSE;
+    
+    DECLARE dept20_cursor CURSOR FOR 
+        SELECT ename, sal FROM emp WHERE deptno = 20;
+        
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN dept20_cursor;
+
+    read_loop: LOOP
+        FETCH dept20_cursor INTO v_ename, v_sal;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        SELECT CONCAT('Employee: ', v_ename, ' earns ', v_sal) AS info;
+    END LOOP;
+
+    CLOSE dept20_cursor;
+END //
+
+DELIMITER ;
+
+
+3. Write a cursor to increment salary as follows
+     Clerk 10 % rise
+     Manager 5% rise
+     Analyst 7% rise.
+     No rise given for other jobs.
+
+DELIMITER //
+
+CREATE PROCEDURE IncrementByJob()
+BEGIN
+    DECLARE v_empno INT;
+    DECLARE v_job VARCHAR(50);
+    DECLARE done INT DEFAULT FALSE;
+    
+    DECLARE job_cursor CURSOR FOR 
+        SELECT empno, job FROM emp;
+        
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN job_cursor;
+
+    read_loop: LOOP
+        FETCH job_cursor INTO v_empno, v_job;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        IF v_job = 'Clerk' THEN
+            UPDATE emp SET sal = sal * 1.10 WHERE empno = v_empno;
+        ELSEIF v_job = 'Manager' THEN
+            UPDATE emp SET sal = sal * 1.05 WHERE empno = v_empno;
+        ELSEIF v_job = 'Analyst' THEN
+            UPDATE emp SET sal = sal * 1.07 WHERE empno = v_empno;
+        END IF;
+    END LOOP;
+
+    CLOSE job_cursor;
+END //
+
+DELIMITER ;
+
+
+4. Pass job as a parameter to procedure and display all
+employees working​​​​ for the specified job using cursor.
+DELIMITER //
+
+CREATE PROCEDURE GetEmployeesByJob(IN p_job VARCHAR(50))
+BEGIN
+    DECLARE v_ename VARCHAR(50);
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE emp_list TEXT DEFAULT '';
+    
+
+    DECLARE emp_job_cursor CURSOR FOR 
+        SELECT ename FROM emp WHERE job = p_job;
+        
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN emp_job_cursor;
+
+    read_loop: LOOP
+        FETCH emp_job_cursor INTO v_ename;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        IF emp_list = '' THEN
+            SET emp_list = v_ename;
+        ELSE
+            SET emp_list = CONCAT(emp_list, ', ', v_ename);
+        END IF;
+    END LOOP;
+
+    CLOSE emp_job_cursor;
+    IF emp_list = '' THEN
+        SELECT CONCAT('No employees found working as ', p_job) AS Result;
+    ELSE
+        SELECT emp_list AS Employees;
+    END IF;
+END //
+
+DELIMITER ;
+
+
+
+
+---------------------------------------------------------------------------
+Triggers::
+
+1. Consider following tables
+    product(pid, pname, price, qty)
+    product_details(pid,amt)
+    amt = product.price * qty
+Write a trigger which will calculate amt every time any update is
+done in the price of an item. 
+Hint : after update trigger
+
+DELIMITER //
+
+CREATE TRIGGER trg_UpdateProductAmount
+AFTER UPDATE ON product
+FOR EACH ROW
+BEGIN
+    IF OLD.price <> NEW.price THEN
+        UPDATE product_details
+        SET amt = NEW.price * NEW.qty
+        WHERE pid = NEW.pid;
+    END IF;
+END //
+
+DELIMITER ;
+
+2. Consider following table
+   emp_wage(eno, ename, sal, over_time)
+   eno : pk auto_inc
+Write a trigger which will insert over_time as 400 if value of
+over_time entered is null.    
+Hint : before insert trigger
+
+DELIMITER //
+
+CREATE TRIGGER trg_SetDefaultOvertime
+BEFORE INSERT ON emp_wage
+FOR EACH ROW
+BEGIN
+    IF NEW.over_time IS NULL THEN
+        SET NEW.over_time = 400;
+    END IF;
+END //
+
+DELIMITER ;
+
+
+
+3. Consider following table
+      order_master(oid, pname, qty, price)
+      oid : pk auto_inc
+      order_log(oid ,odate, amt)
+Write a trigger which will create a log of all orders once order
+is placed.
+Hint : after insert trigger
+CREATE TABLE order_master (
+    oid INT AUTO_INCREMENT,
+    pname VARCHAR(100) NOT NULL,
+    qty INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (oid)
+);
+
+CREATE TABLE order_log (
+    oid INT,
+    odate DATE NOT NULL,
+    amt DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (oid)
+);
+
+
+DELIMITER //
+
+CREATE TRIGGER trg_CreateOrderLog
+AFTER INSERT ON order_master 
+FOR EACH ROW
+BEGIN
+    INSERT INTO order_log (oid, odate, amt)
+    VALUES (NEW.oid, CURDATE(), NEW.qty * NEW.price);
+END //
+
+DELIMITER ;
+
+INSERT INTO order_master (pname, qty, price) 
+VALUES ('Mobile Phone', 1, 15000.00);
+
+SELECT * FROM order_log;
+
+
+
+4. Create a table emp_data(eno PK auto_inc, ename,job,sal)
+Add following data
+('Akshay','Developer',30000)
+('Anika','Analyst',50000)
+('Radhika';'Manager',65000)
+Write a trigger to keep log of the data if any updation is done
+in the salary.
+Keep data in emp_log(eno, ename,job, osal, nsal)
+where osal : is previous salary
+      nsal : is updated salary
+
+
+CREATE TABLE emp_data (
+    eno INT AUTO_INCREMENT,
+    ename VARCHAR(100) NOT NULL,
+    job VARCHAR(50) NOT NULL,
+    sal DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (eno)
+);
+
+CREATE TABLE emp_log (
+    eno INT,
+    ename VARCHAR(100),
+    job VARCHAR(50),
+    osal DECIMAL(10, 2), 
+    nsal DECIMAL(10, 2) 
+);
+
+
+INSERT INTO emp_data (ename, job, sal) VALUES 
+('Akshay', 'Developer', 30000.00),
+('Anika', 'Analyst', 50000.00),
+('Radhika', 'Manager', 65000.00);
+
+DELIMITER //
+
+CREATE TRIGGER trg_KeepSalaryLog
+AFTER UPDATE ON emp_data
+FOR EACH ROW
+BEGIN
+    IF OLD.sal <> NEW.sal THEN
+        INSERT INTO emp_log (eno, ename, job, osal, nsal)
+        VALUES (OLD.eno, OLD.ename, OLD.job, OLD.sal, NEW.sal);
+    END IF;
+END //
+
+DELIMITER ;
+
+UPDATE emp_data 
+SET sal = 35000.00 
+WHERE ename = 'Akshay';
+
+SELECT * FROM emp_log;
+
