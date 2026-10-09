@@ -54,11 +54,11 @@ To make sure all table pathways work natively, ensure your local directories are
 To fetch all the lab structures to your local machine, run the following command in your terminal:
 
 ```bash
-git clone https://github.com
+git clone https://github.com/rushimore11/CDAC_Assignment_Acts.git
 ```
 
 ---
 
 <p align="center">
-  <i>Developed and Maintained by <a href="https://github.com">rushimore11</a> ✨</i>
+  <i>Developed and Maintained by <a href="https://github.com/rushimore11/CDAC_Assignment_Acts.git">rushimore11</a> ✨</i>
 </p>
