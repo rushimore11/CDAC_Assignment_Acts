@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Shop 2.0</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">Pizza Shop 2.0</div>
+        
+        <div class="form-row">
+            <div class="form-label">Name</div>
+            <div class="form-input">
+                <input type="text" name="name">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-label">Pizza Topping</div>
+            <div class="form-input radio-group">
+                <label><input type="radio" name="topping" value="supreme"> Supreme</label>
+                <label><input type="radio" name="topping" value="vegetarian"> Vegetarian</label>
+                <label><input type="radio" name="topping" value="hawaiian"> Hawaiian</label>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-label">Pizza Sauce</div>
+            <div class="form-input">
+                <select name="sauce">
+                    <option value="tomato">Tomato</option>
+                    <option value="bbq">BBQ</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-label">Optional Extras</div>
+            <div class="form-input checkbox-group">
+                <label><input type="checkbox" name="extras" value="cheese"> Extra Cheese</label>
+                <label><input type="checkbox" name="extras" value="gluten-free"> Gluten Free Base</label>
+            </div>
+        </div>
+
+        <div class="delivery-section">
+            <div class="delivery-label">Delivery Instructions:</div>
+            <textarea name="instructions" rows="4"></textarea>
+        </div>
+
+        <div class="form-footer">
+            <button type="submit">Send my Order</button>
+        </div>
+    </div>
+</body>
+</html>

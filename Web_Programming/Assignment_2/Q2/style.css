@@ -1,0 +1,74 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+    background-color: #ffffff;
+}
+
+.form-container {
+    border: 2px double #333;
+    width: 450px;
+    padding: 2px;
+}
+
+.form-header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 1px solid #333;
+    padding: 5px 0;
+}
+
+.form-row {
+    display: flex;
+    border-bottom: 1px solid #333;
+}
+
+.form-label {
+    width: 120px;
+    border-right: 1px solid #333;
+    padding: 8px;
+    font-size: 14px;
+}
+
+.form-input {
+    flex: 1;
+    padding: 8px;
+}
+
+.form-input input[type="text"], .form-input select {
+    width: 90%;
+    padding: 2px;
+}
+
+.radio-group, .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.delivery-section {
+    border-bottom: 1px solid #333;
+}
+
+.delivery-label {
+    padding: 6px 8px;
+    font-size: 14px;
+}
+
+textarea {
+    width: calc(100% - 20px);
+    margin: 0 8px 8px 8px;
+    border: 1px solid #999;
+    resize: none;
+}
+
+.form-footer {
+    padding: 8px;
+}
+
+button {
+    padding: 4px 10px;
+    cursor: pointer;
+}
