@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Section F - Value Filtering</title>
+</head>
+<body>
+    <h1>Section F: Value Filtering</h1>
+    <p>Check the system console output values.</p>
+
+    <script>
+        // Given input data string matching requirement
+        let numStr = "1,2,3,4,5,6,7,8,9";
+        let itemsArray = numStr.split(",");
+
+        // 1. Print only numbers, not commas
+        let spacedNumbers = itemsArray.join(" ");
+        console.log("Q1. Numbers only:", spacedNumbers);
+
+        // 2. Print all even numbers
+        let evenNumbers = itemsArray.map(Number).filter(n => n % 2 === 0);
+        console.log("Q2. Filtered even numbers:", evenNumbers.join(", "));
+    </script>
+</body>
+</html>

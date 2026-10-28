@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Table</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #00a4e4, #007bb6);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 50px 20px;
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 5px 0;
+        }
+        .pricing-container {
+            display: flex;
+            gap: 30px;
+            max-width: 1100px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            padding: 40px 30px;
+            flex: 1;
+            min-width: 280px;
+            max-width: 320px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card__plan {
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .card__price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+        }
+        .card__price span {
+            font-size: 1rem;
+            font-weight: normal;
+            color: #888;
+        }
+        .card__divider {
+            width: 40px;
+            height: 4px;
+            background-color: #007bb6;
+            margin-bottom: 30px;
+        }
+        .card__features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+            width: 100%;
+            text-align: left;
+        }
+        .card__features li {
+            padding: 10px 0;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card__features li.included { color: #333; }
+        .card__features li.excluded { color: #aaa; text-decoration: line-through; }
+        .btn-subscribe {
+            width: 100%;
+            background: #007bb6;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 123, 182, 0.3);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Bootstrap pricing table</h1>
+        <p>Easily create a classy pricing table in Bootstrap 4</p>
+        <p style="font-size: 0.9rem; opacity: 0.7;">Bootstrap snippet by Bootstrapious</p>
+    </div>
+
+    <div class="pricing-container">
+        <!-- Basic Card -->
+        <div class="card">
+            <div class="card__plan">Basic</div>
+            <div class="card__price">$199<span>/month</span></div>
+            <div class="card__divider"></div>
+            <ul class="card__features">
+                <li class="included">✔️ Lorem ipsum dolor sit amet</li>
+                <li class="included">✔️ Sed ut perspiciatis</li>
+                <li class="included">✔️ At vero eos et accusamus</li>
+                <li class="excluded">❌ Nam libero tempore</li>
+                <li class="excluded">❌ Sed ut perspiciatis</li>
+                <li class="excluded">❌ Sed ut perspiciatis</li>
+            </ul>
+            <button class="btn-subscribe">Subscribe</button>
+        </div>
+
+        <!-- Pro Card -->
+        <div class="card">
+            <div class="card__plan">Pro</div>
+            <div class="card__price">$399<span>/month</span></div>
+            <div class="card__divider"></div>
+            <ul class="card__features">
+                <li class="included">✔️ Lorem ipsum dolor sit amet</li>
+                <li class="included">✔️ Sed ut perspiciatis</li>
+                <li class="included">✔️ At vero eos et accusamus</li>
+                <li class="included">✔️ Nam libero tempore</li>
+                <li class="included">✔️ Sed ut perspiciatis</li>
+                <li class="excluded">❌ Sed ut perspiciatis</li>
+            </ul>
+            <button class="btn-subscribe">Subscribe</button>
+        </div>
+
+        <!-- Enterprise Card -->
+        <div class="card">
+            <div class="card__plan">Enterprise</div>
+            <div class="card__price">$899<span>/month</span></div>
+            <div class="card__divider"></div>
+            <ul class="card__features">
+                <li class="included">✔️ Lorem ipsum dolor sit amet</li>
+                <li class="included">✔️ Sed ut perspiciatis</li>
+                <li class="included">✔️ At vero eos et accusamus</li>
+                <li class="included">✔️ Nam libero tempore</li>
+                <li class="included">✔️ Sed ut perspiciatis</li>
+                <li class="included">✔️ Sed ut perspiciatis</li>
+            </ul>
+            <button class="btn-subscribe">Subscribe</button>
+        </div>
+    </div>
+</body>
+</html>

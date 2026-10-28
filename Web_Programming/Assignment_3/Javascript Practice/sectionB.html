@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Section B - Conditionals</title>
+</head>
+<body>
+    <h1>Section B: Conditionals & Calculators</h1>
+    <p>Refresh the page to trigger the compulsory prompt calculator window.</p>
+
+    <script>
+        // 1. Find if given number is even or odd
+        let checkNum = 42;
+        if (checkNum % 2 === 0) {
+            console.log(`Q1. ${checkNum} is Even`);
+        } else {
+            console.log(`Q1. ${checkNum} is Odd`);
+        }
+
+        // 2. Find the greater number out of three numbers
+        let x = 10, y = 25, z = 15;
+        let greater = Math.max(x, y, z);
+        console.log(`Q2. The greatest number among (${x}, ${y}, ${z}) is:`, greater);
+
+        // 3. Print the day of the week
+        let dayNum = 3; 
+        switch(dayNum) {
+            case 1: console.log("Q3. Day:", "Monday"); break;
+            case 2: console.log("Q3. Day:", "Tuesday"); break;
+            case 3: console.log("Q3. Day:", "Wednesday"); break;
+            case 4: console.log("Q3. Day:", "Thursday"); break;
+            case 5: console.log("Q3. Day:", "Friday"); break;
+            case 6: console.log("Q3. Day:", "Saturday"); break;
+            case 7: console.log("Q3. Day:", "Sunday"); break;
+            default: console.log("Q3. Invalid day selection");
+        }
+
+        // 4 (Compulsory). Calculator using if-else ladder
+        let n1 = parseFloat(prompt("Calculator: Enter first number:"));
+        let n2 = parseFloat(prompt("Calculator: Enter second number:"));
+        let opr = prompt("Calculator: Enter operator (+, -, *, /):");
+
+        if (opr === "+") {
+            alert(`Result: ${n1} + ${n2} = ${n1 + n2}`);
+        } else if (opr === "-") {
+            alert(`Result: ${n1} - ${n2} = ${n1 - n2}`);
+        } else if (opr === "*") {
+            alert(`Result: ${n1} * ${n2} = ${n1 * n2}`);
+        } else if (opr === "/") {
+            alert(`Result: ${n1} / ${n2} = ${n1 / n2}`);
+        } else {
+            alert("Error: Invalid operator input.");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Section C - Strings & Lists</title>
+</head>
+<body>
+    <h1>Section C: Strings & Dynamic DOM Lists</h1>
+    
+    <h3>Your Custom Fruit List:</h3>
+    <ul id="fruit-list"></ul>
+
+    <script>
+        // 1. Check if given string ends with "t"
+        let sampleStr = "javascript";
+        let endsWithT = sampleStr.endsWith("t");
+        console.log(`Q1. Does "${sampleStr}" end with 't'?:`, endsWithT);
+
+        // 2. Accept fruits name from user and show in list
+        let fruitsInput = prompt("Enter multiple fruit names separated by commas:");
+        if (fruitsInput) {
+            let fruitsArr = fruitsInput.split(",");
+            let listContainer = document.getElementById("fruit-list");
+            
+            fruitsArr.forEach(fruit => {
+                let li = document.createElement("li");
+                li.textContent = fruit.trim();
+                listContainer.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>

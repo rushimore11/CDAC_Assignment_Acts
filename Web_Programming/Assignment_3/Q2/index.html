@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grayscale Theme</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .header {
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://unsplash.com');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            padding: 20px 50px;
+        }
+        /* Required flex-grow mapping logic */
+        .navbar__brand {
+            flex-grow: 1;
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+        .navbar__menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar__link {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        .navbar__link:hover {
+            color: white;
+        }
+        .hero-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .hero-content__title {
+            font-size: 5rem;
+            letter-spacing: 10px;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+        .hero-content__subtitle {
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 0 40px 0;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+        }
+        .btn-cta {
+            background-color: #64a19d;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .btn-cta:hover {
+            background-color: #528581;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <nav class="navbar">
+            <div class="navbar__brand">Start Bootstrap</div>
+            <ul class="navbar__menu">
+                <li><a href="#" class="navbar__link">About</a></li>
+                <li><a href="#" class="navbar__link">Projects</a></li>
+                <li><a href="#" class="navbar__link">Contact</a></li>
+            </ul>
+        </nav>
+        <main class="hero-content">
+            <h1 class="hero-content__title">Grayscale</h1>
+            <p class="hero-content__subtitle">A free responsive, one page Bootstrap theme created by Start Bootstrap.</p>
+            <button class="btn-cta">Get Started</button>
+        </main>
+    </div>
+</body>
+</html>

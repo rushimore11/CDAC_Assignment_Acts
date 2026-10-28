@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Section D - String Parsing</title>
+</head>
+<body>
+    <h1>Section D: String Parsing Arithmetic</h1>
+    <p>Check your browser console log window (F12) to view evaluation results.</p>
+
+    <script>
+        // Given configuration string
+        let num = "1,2,3,4,5,6,7,8,9";
+        let parsedArray = num.split(",");
+
+        // 1. Fetch "1" and "5" from string and perform numerical addition
+        let val1 = parseInt(parsedArray[0]); // Index position matching value "1"
+        let val5 = parseInt(parsedArray[4]); // Index position matching value "5"
+        console.log("Q1. Numerical Addition (1 + 5):", (val1 + val5));
+
+        // 2. Fetch "2" and "8" from string and perform numerical multiplication
+        let val2 = parseInt(parsedArray[1]); // Index position matching value "2"
+        let val8 = parseInt(parsedArray[7]); // Index position matching value "8"
+        console.log("Q2. Numerical Multiplication (2 * 8):", (val2 * val8));
+    </script>
+</body>
+</html>
