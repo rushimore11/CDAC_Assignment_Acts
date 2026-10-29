@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza Shop 2.0</title>
+    <style>
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+    <script>
+        function addToTable() {
+            var isValidName = nameValidation();
+            var isValidInstruction = deliveryInstruction();
+
+            if (isValidName && isValidInstruction) {
+                var username = document.getElementById("name").value;
+
+                // Safely get the selected radio button value
+                var selectedTopping = document.querySelector('input[name="topping"]:checked');
+                var topping = selectedTopping ? selectedTopping.value : "None";
+
+                var sauce = document.getElementById("sauce").value;
+
+                // Safely gather all checked optional extras
+                var optional = [];
+                var extraDom = document.querySelectorAll('.extra');
+                extraDom.forEach(function(checkbox) {
+                    if (checkbox.checked) {
+                        optional.push(checkbox.value);
+                    }
+                });
+                
+                var description = document.getElementById("description").value;
+
+                var htmlString = `<tr>
+                    <td>${username}</td>
+                    <td>${topping}</td>
+                    <td>${sauce}</td>
+                    <td>${optional.length > 0 ? optional.join(", ") : "None"}</td>
+                    <td>${description}</td>
+                </tr>`;
+
+                document.getElementById("userTableBody").innerHTML += htmlString;
+
+                // Clear input fields after successful submission
+                document.getElementById("name").value = "";
+                document.getElementById("description").value = "";
+                document.getElementById("nameErr").innerHTML = "";
+                document.getElementById("instructionErr").innerHTML = "";
+            }
+        }
+
+        function deliveryInstruction() {
+            var instruction = document.getElementById("description").value;
+            if (instruction.length < 5) {
+                document.getElementById("instructionErr").innerHTML = "Instruction must be of at least 5 char";
+                return false;
+            } else {
+                document.getElementById("instructionErr").innerHTML = "";
+                return true;
+            }
+        }
+
+        function nameValidation() {
+            var username = document.getElementById("name").value;
+            if (username.length < 5) {
+                document.getElementById("nameErr").innerHTML = "Name must be of at least 5 char";
+                return false;
+            } else {
+                document.getElementById("nameErr").innerHTML = "";
+                return true;
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <table border="1">
+        <tr>
+            <th colspan="2">Pizza Shop 2.0</th>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>
+                <input type="text" id="name" placeholder="Enter Name" oninput="nameValidation()">
+                <br>
+                <span id="nameErr" class="error"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Pizza Topping</td>
+            <td>
+                <input type="radio" name="topping" value="Supreme" checked> Supreme
+                <br>
+                <input type="radio" name="topping" value="Vegetarian"> Vegetarian
+                <br>
+                <input type="radio" name="topping" value="Hawaiian"> Hawaiian
+            </td>
+        </tr>
+        <tr>
+            <td>Pizza Sauce</td>
+            <td>
+                <select id="sauce" style="background-color: antiquewhite;">
+                    <option value="Tomato">Tomato</option>
+                    <option value="Chili">Chili</option>
+                    <option value="Marinara">Marinara</option>
+                    <option value="Neapolitan">Neapolitan</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Optional Extras</td>
+            <td>
+                <input type="checkbox" class="extra" value="Extra Cheese"> Extra Cheese
+                <input type="checkbox" class="extra" value="Gluten Free Base"> Gluten Free Base
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <label for="description">Delivery Instructions :</label>
+                <br>
+                <textarea name="description" id="description" rows="4" cols="50" placeholder="Enter Your description" oninput="deliveryInstruction()"></textarea>
+                <br>
+                <span id="instructionErr" class="error"></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="button" onclick="addToTable()">Send my Order</button>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Pizza Topping</th>
+                <th>Pizza Sauce</th>
+                <th>Optional Extras</th>
+                <th>Delivery Instructions</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+        </tbody>
+    </table>
+
+</body>
+</html>

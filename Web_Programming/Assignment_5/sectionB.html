@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section B: Object Creation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h2 { color: #333; border-bottom: 2px solid #ccc; padding-bottom: 5px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="email"], input[type="number"], input[type="date"] {
+            width: 95%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;
+        }
+        .marks-group {
+            display: flex; gap: 10px; margin-bottom: 5px;
+        }
+        button {
+            background-color: #007bff; color: white; border: none; padding: 10px 15px;
+            border-radius: 4px; cursor: pointer; font-size: 14px;
+        }
+        button:hover { background-color: #0056b3; }
+        .hint { color: #666; font-size: 13px; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <p class="hint"><strong>Note:</strong> Open your browser console (F12 or Right Click -> Inspect -> Console) to see the generated objects.</p>
+
+    <!-- 1. Employee Section -->
+    <div class="container">
+        <h2>1. Employee (Function Constructor)</h2>
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" id="empName" value="">
+        </div>
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" id="empEmail" value="">
+        </div>
+        <div class="form-group">
+            <label>Salary:</label>
+            <input type="number" id="empSalary" value="">
+        </div>
+        <div class="form-group">
+            <label>Department:</label>
+            <input type="text" id="empDept" value="">
+        </div>
+        <button onclick="createEmployeeObject()">Create & Check Employee</button>
+    </div>
+
+    <!-- 2. Student Section -->
+    <div class="container">
+        <h2>2. Student (Class Syntax)</h2>
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" id="studName" value="">
+        </div>
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" id="studEmail" value="">
+        </div>
+        <div class="form-group">
+            <label>Department:</label>
+            <input type="text" id="studDept" value="">
+        </div>
+        <div class="form-group">
+            <label>Date of Birth:</label>
+            <input type="date" id="studDob" value="">
+        </div>
+        
+        <label>Marks (3 Subjects):</label>
+        <div class="marks-group">
+            <input type="text" id="sub1" value="Math" placeholder="Subject 1">
+            <input type="number" id="mark1" value="85" placeholder="Mark">
+        </div>
+        <div class="marks-group">
+            <input type="text" id="sub2" value="Physics" placeholder="Subject 2">
+            <input type="number" id="mark2" value="90" placeholder="Mark">
+        </div>
+        <div class="marks-group">
+            <input type="text" id="sub3" value="Chemistry" placeholder="Subject 3">
+            <input type="number" id="mark3" value="78" placeholder="Mark">
+        </div>
+        
+        <button onclick="createStudentObject()">Create & Check Student</button>
+    </div>
+
+    <script>
+        // ====================================================================
+        // 1. Employee Object using Function Constructor
+        // ====================================================================
+        function Employee(name, email, salary, department) {
+            this.name = name;
+            this.email = email;
+            this.salary = parseFloat(salary);
+            this.department = department;
+            
+            // Method to calculate tax (assuming a flat 10% tax for demonstration)
+            this.calculateTax = function() {
+                return this.salary * 0.10;
+            };
+        }
+
+        function createEmployeeObject() {
+            const name = document.getElementById('empName').value;
+            const email = document.getElementById('empEmail').value;
+            const salary = document.getElementById('empSalary').value;
+            const department = document.getElementById('empDept').value;
+
+            // Instantiate object
+            const emp = new Employee(name, email, salary, department);
+            
+            console.log("--- Employee Object ---");
+            console.log(emp);
+            console.log("Calculated Tax (10%):", emp.calculateTax());
+        }
+
+        // ====================================================================
+        // 2. Student Object using Class Syntax
+        // ====================================================================
+        class Student {
+            constructor(name, email, department, dob, marks) {
+                this.name = name;
+                this.email = email;
+                this.department = department;
+                this.dob = dob;
+                this.marks = marks; // Expects array of objects: [{subject, mark}, ...]
+            }
+
+            // Method to calculate total marks
+            calculateTotalMarks() {
+                return this.marks.reduce((total, item) => total + parseFloat(item.mark || 0), 0);
+            }
+        }
+
+        function createStudentObject() {
+            const name = document.getElementById('studName').value;
+            const email = document.getElementById('studEmail').value;
+            const department = document.getElementById('studDept').value;
+            const dob = document.getElementById('studDob').value;
+
+            // Constructing the marks array of objects from input fields
+            const marksArray = [
+                { subject: document.getElementById('sub1').value, mark: document.getElementById('mark1').value },
+                { subject: document.getElementById('sub2').value, mark: document.getElementById('mark2').value },
+                { subject: document.getElementById('sub3').value, mark: document.getElementById('mark3').value }
+            ];
+
+            // Instantiate object
+            const stud = new Student(name, email, department, dob, marksArray);
+
+            console.log("--- Student Object ---");
+            console.log(stud);
+            console.log("Total Marks:", stud.calculateTotalMarks());
+        }
+    </script>
+</body>
+</html>

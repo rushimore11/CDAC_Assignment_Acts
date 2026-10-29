@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do List</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 30px; }
+  .container { max-width: 700px; margin: auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.1); }
+  h1 { text-align: center; }
+  label { display: block; margin-top: 12px; font-weight: bold; }
+  input, textarea, select { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+  button { margin-top: 15px; padding: 10px 18px; background: #2563eb; color: white; border: none; border-radius: 5px; cursor: pointer; }
+  button:hover { background: #1d4ed8; }
+  table { width: 100%; border-collapse: collapse; margin-top: 25px; }
+  th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+  th { background: #2563eb; color: white; }
+  .delete { background: #dc2626; padding: 6px 12px; }
+  .delete:hover { background: #b91c1c; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>To-Do List</h1>
+
+  <label>Task Name</label>
+  <input type="text" id="taskName" placeholder="Enter task name">
+
+  <label>Task Description</label>
+  <textarea id="taskDescription" rows="3" placeholder="Enter task description"></textarea>
+
+  <label>Due Date</label>
+  <input type="date" id="dueDate">
+
+  <label>Status</label>
+  <select id="status">
+    <option value="DUE">DUE</option>
+    <option value="DONE">DONE</option>
+  </select>
+
+  <button onclick="saveTask()">Save Task</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Task Name</th>
+        <th>Description</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="taskTableBody"></tbody>
+  </table>
+</div>
+
+<script>
+let tasks = [];
+
+function saveTask() {
+  const taskName = document.getElementById("taskName").value.trim();
+  const taskDescription = document.getElementById("taskDescription").value.trim();
+  const dueDate = document.getElementById("dueDate").value;
+  const status = document.getElementById("status").value;
+
+  if (taskName === "" || dueDate === "") {
+    alert("Please enter task name and due date.");
+    return;
+  }
+
+  const task = {
+    taskName: taskName,
+    taskDescription: taskDescription,
+    dueDate: dueDate,
+    status: status
+  };
+
+  tasks.push(task);
+  displayTasks();
+  clearInputs();
+}
+
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  displayTasks();
+}
+
+function displayTasks() {
+  const tableBody = document.getElementById("taskTableBody");
+  tableBody.innerHTML = "";
+
+  tasks.forEach((task, index) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${task.taskName}</td>
+      <td>${task.taskDescription}</td>
+      <td>${task.dueDate}</td>
+      <td>${task.status}</td>
+      <td><button class="delete" onclick="deleteTask(${index})">Delete</button></td>
+    `;
+
+    tableBody.appendChild(row);
+  });
+}
+
+function clearInputs() {
+  document.getElementById("taskName").value = "";
+  document.getElementById("taskDescription").value = "";
+  document.getElementById("dueDate").value = "";
+  document.getElementById("status").value = "DUE";
+}
+</script>
+</body>
+</html>

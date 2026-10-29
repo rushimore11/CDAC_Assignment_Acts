@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section C: Prototypical Inheritance</title>
+</head>
+<body>
+
+    <h3>Section C: Prototypical Inheritance Implementation</h3>
+   
+    <script>
+        
+        function Person(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        Person.prototype.greet = function() {
+            return "Hello, I'm " + this.name + "!";
+        };
+
+        function Student(name, age, subject) {
+        
+            Person.call(this, name, age);
+            this.subject = subject;
+        }
+
+  
+        Student.prototype = Object.create(Person.prototype);
+
+        Student.prototype.constructor = Student;
+
+        Student.prototype.study = function() {
+            return this.name + " is studying " + this.subject + ".";
+        };
+
+    
+        const studentInstance = new Student("Rahul Sharma", 20, "JavaScript");
+
+        console.log("--- Student Instance Object ---");
+        console.log(studentInstance);
+
+        console.log("\n--- Testing Inherited Method (greet) ---");
+        console.log(studentInstance.greet()); 
+
+        console.log("\n--- Testing Student Method (study) ---");
+        console.log(studentInstance.study()); 
+
+        console.log("\n--- Inheritance Verification ---");
+        console.log("Is studentInstance an instance of Student?", studentInstance instanceof Student); 
+        console.log("Is studentInstance an instance of Person?", studentInstance instanceof Person); 
+    </script>
+
+</body>
+</html>

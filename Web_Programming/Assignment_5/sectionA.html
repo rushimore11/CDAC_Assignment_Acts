@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section A: Hardcoded Objects</title>
+</head>
+<body>
+
+    <h3>Section A: Object creation with hardcoded data.</h3>
+    <p>Open your browser console (F12 -> Console) to see the output.</p>
+
+    <script>
+        
+        function Employee(name, email, salary, department) {
+            this.name = name;
+            this.email = email;
+            this.salary = salary;
+            this.department = department;
+           
+            this.calculateTax = function() {
+                return this.salary * 0.10;
+            };
+        }
+
+        const emp1 = new Employee("Alice Smith", "alice@company.com", 65000, "Human Resources");
+
+        console.log("--- 1. Employee Object ---");
+        console.log(emp1);
+        console.log("Calculated Tax:", emp1.calculateTax());
+
+
+        class Student {
+            constructor(name, email, department, dob, marks) {
+                this.name = name;
+                this.email = email;
+                this.department = department;
+                this.dob = dob;
+                this.marks = marks; 
+            }
+
+      
+            calculateTotalMarks() {
+                return this.marks.reduce((total, item) => total + item.mark, 0);
+            }
+        }
+
+      
+        const studentMarks = [
+            { subject: "Mathematics", mark: 92 },
+            { subject: "Computer Science", mark: 88 },
+            { subject: "Physics", mark: 79 }
+        ];
+
+        const stud1 = new Student(
+            "Bob Jones", 
+            "bob.jones@university.edu", 
+            "Engineering", 
+            "2004-03-22", 
+            studentMarks
+        );
+
+        console.log("\n--- 2. Student Object ---");
+        console.log(stud1);
+        console.log("Total Marks:", stud1.calculateTotalMarks());
+    </script>
+
+</body>
+</html>

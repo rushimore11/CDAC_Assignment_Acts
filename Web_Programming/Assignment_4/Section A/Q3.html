@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+
+        <script>
+        function addToTable(){
+            var movieName = document.getElementById("name").value;
+            var moviePrice = document.getElementById("price").value;
+            var movieSeat = document.getElementById("seat").value;
+
+            var htmlString = `<tr>
+                <td> ${movieName}</td>
+                <td> ${moviePrice}</td>
+                <td> ${movieSeat}</td>
+            </tr>`;
+
+            document.getElementById("userTableBody").innerHTML += htmlString;
+
+
+        }
+
+    </script>
+    </head>
+    <body>
+
+        Enter Movie Name : <input type="text" id="name">
+        <br>
+        Price : <input type="text" id="price">
+        <br>
+        Seat : <input type="text" id="seat">
+        <br>
+        <button id="submit" onclick="addToTable()"> Add</button>
+        <hr>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Movie Name</th>
+                    <th>Price</th>
+                    <th>Seat</th>
+                </tr>
+                <tbody id="userTableBody"></tbody>
+            </thead>
+        </table>
+
+    </body>
+</html>
