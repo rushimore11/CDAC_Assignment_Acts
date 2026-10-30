@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List Frontend</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif;
+             max-width: 600px;
+              margin: 30px auto;
+              padding: 20px; 
+              background: #fdfdfd; 
+              border: 1px solid #ddd; 
+              border-radius: 8px;
+            }
+        input, textarea, select, button {
+             width: 100%; padding: 10px; 
+             margin-top: 8px; 
+             margin-bottom: 15px; 
+             box-sizing: border-box;
+             }
+        button {
+             background: #27ae60; 
+             color: white; border: none; 
+             font-weight: bold;
+              cursor: pointer;
+              border-radius: 4px; 
+            }
+        button:hover {
+             background: #219653;
+             }
+        ul {
+             list-style: none;
+             padding: 0;
+             }
+        li { 
+            background: #fff; 
+            border: 1px solid #ccc;
+             padding: 15px; margin-bottom: 10px;
+              border-radius: 6px; display: flex;
+               justify-content: space-between; 
+               align-items: center; 
+            }
+        .task-info h4 { 
+            margin: 0 0 5px 0; 
+        }
+        .task-info p { 
+            margin: 0 0 5px 0; 
+            color: #666;
+             font-size: 14px;
+             }
+        .status-done { 
+            color: green; 
+            font-weight: bold;
+         }
+        .status-due {
+             color: orange;
+              font-weight: bold; 
+            }
+        .delete-btn { 
+            background: #e74c3c;
+             color: white; border: none; 
+             padding: 6px 12px; cursor: pointer; 
+             border-radius: 4px; 
+             width: auto;
+            }
+        .delete-btn:hover {
+             background: #c0392b;
+             }
+    </style>
+</head>
+<body>
+
+    <h3>4. To-Do List Application</h3>
+    
+    <form id="todoForm">
+        <label>Task Name:</label>
+        <input type="text" id="taskName" required placeholder="Enter task title">
+
+        <label>Task Description:</label>
+        <textarea id="taskDesc" placeholder="Enter task details..." rows="3"></textarea>
+
+        <label>Due Date:</label>
+        <input type="date" id="dueDate" required>
+
+        <label>Status:</label>
+        <select id="taskStatus">
+            <option value="DUE">DUE</option>
+            <option value="DONE">DONE</option>
+        </select>
+
+        <button type="submit">Save Task</button>
+    </form>
+
+    <hr>
+
+    <h3>Task List</h3>
+    <ul id="taskList"></ul>
+
+    <script>
+        let tasks = [];
+
+        const todoForm = document.getElementById('todoForm');
+        const taskList = document.getElementById('taskList');
+
+        todoForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const newTask = {
+                id: Date.now(),
+                name: document.getElementById('taskName').value,
+                description: document.getElementById('taskDesc').value,
+                dueDate: document.getElementById('dueDate').value,
+                status: document.getElementById('taskStatus').value
+            };
+
+            tasks.push(newTask);
+            renderTasks();
+            todoForm.reset();
+        });
+
+        function deleteTask(id) {
+            tasks = tasks.filter(task => task.id !== id);
+            renderTasks();
+        }
+
+        function renderTasks() {
+            taskList.innerHTML = '';
+            if (tasks.length === 0) {
+                taskList.innerHTML = '<p style="color: #888;">No tasks added yet.</p>';
+                return;
+            }
+
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div class="task-info">
+                        <h4>${task.name}</h4>
+                        <p>${task.description}</p>
+                        <small>Due: ${task.dueDate}</small> | 
+                        <span class="${task.status === 'DONE' ? 'status-done' : 'status-due'}">${task.status}</span>
+                    </div>
+                    <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
+                `;
+                taskList.appendChild(li);
+            });
+        }
+
+        renderTasks();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Billionaires Table</title>
+    <style>
+        body {
+             font-family: Arial, sans-serif;
+              margin: 30px; 
+            }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+        }
+        th, td { border: 1px solid #ddd;
+             padding: 10px; text-align: left;
+            }
+        th {
+             background-color: #f4f4f4; 
+            }
+    </style>
+</head>
+<body>
+
+    <h3>Billionaires Data Table</h3>
+    <table id="billionaireTable">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Year</th>
+                <th>Company</th>
+                <th>Sector</th>
+                <th>Worth ($B)</th>
+                <th>Citizenship</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const billionaires = [
+            { "name": "Bill Gates", "rank": 1, "year": 1996, "company": { "name": "Microsoft", "sector": "Software" }, "citizenship": "United States", "wealth": { "worth in billions": 18.5 } },
+            { "name": "Bill Gates", "rank": 1, "year": 2001, "company": { "name": "Microsoft", "sector": "Software" }, "citizenship": "United States", "wealth": { "worth in billions": 58.7 } },
+            { "name": "Bill Gates", "rank": 1, "year": 2014, "company": { "name": "Microsoft", "sector": "Software" }, "citizenship": "United States", "wealth": { "worth in billions": 76.0 } },
+            { "name": "Warren Buffett", "rank": 2, "year": 1996, "company": { "name": "Berkshire Hathaway", "sector": "Finance" }, "citizenship": "United States", "wealth": { "worth in billions": 15.0 } },
+            { "name": "Warren Buffett", "rank": 2, "year": 2001, "company": { "name": "Berkshire Hathaway", "sector": "Finance" }, "citizenship": "United States", "wealth": { "worth in billions": 32.3 } },
+            { "name": "Carlos Slim Helu", "rank": 2, "year": 2014, "company": { "name": "Telmex", "sector": "Communications" }, "citizenship": "Mexico", "wealth": { "worth in billions": 72.0 } },
+            { "name": "Oeri Hoffman and Sacher", "rank": 3, "year": 1996, "company": { "name": "F. Hoffmann-La Roche", "sector": "pharmaceuticals" }, "citizenship": "Switzerland", "wealth": { "worth in billions": 13.1 } }
+        ];
+
+        const tbody = document.querySelector('#billionaireTable tbody');
+        
+        billionaires.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.rank}</td>
+                <td>${item.name}</td>
+                <td>${item.year}</td>
+                <td>${item.company.name}</td>
+                <td>${item.company.sector}</td>
+                <td>$${item.wealth["worth in billions"]}B</td>
+                <td>${item.citizenship}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    </script>
+
+</body>
+</html>
