@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dialog Form Assignment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+
+    /* Styles on the dialog tag */
+    dialog {
+      border: none;
+      border-radius: 8px;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Style using the backdrop pseudo-element */
+    dialog::backdrop {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .dialog-buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Table styling */
+    table {
+      margin-top: 20px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>User Information Portal</h2>
+  <button id="openBtn">Open Registration Form</button>
+
+  <!-- The Dialog Tag -->
+  <dialog id="userDialog">
+    <form id="userForm">
+      <h3>Enter Details</h3>
+      
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required min="1">
+      </div>
+
+      <div class="dialog-buttons">
+        <button type="submit">Submit</button>
+        <button type="button" id="closeBtn">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Table to display submitted data -->
+  <h3>Submitted Users</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <!-- Dynamic rows will appear here -->
+    </tbody>
+  </table>
+
+  <script>
+    const dialog = document.getElementById('userDialog');
+    const openBtn = document.getElementById('openBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const userForm = document.getElementById('userForm');
+    const tableBody = document.getElementById('tableBody');
+
+    // Show dialog using JS showModal() function
+    openBtn.addEventListener('click', () => {
+      dialog.showModal();
+    });
+
+    // Hide dialog using JS close() function (Close button inside dialog)
+    closeBtn.addEventListener('click', () => {
+      dialog.close();
+    });
+
+    // Read data from the form and show in the table on submit
+    userForm.addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevent page reload
+
+      // Read input values
+      const nameValue = document.getElementById('name').value;
+      const ageValue = document.getElementById('age').value;
+
+      // Create a new table row
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `<td>${nameValue}</td><td>${ageValue}</td>`;
+      
+      // Append row to table body
+      tableBody.appendChild(newRow);
+
+      // Reset form and close the dialog
+      userForm.reset();
+      dialog.close();
+    });
+  </script>
+
+</body>
+</html>

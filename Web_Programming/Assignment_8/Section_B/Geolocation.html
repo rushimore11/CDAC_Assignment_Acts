@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Log Geolocation</title>
+</head>
+<body>
+
+  <button onclick="getLocation()">Get my location</button>
+
+  <script>
+    function getLocation() {
+      // 1. Check if geolocation is available
+      if (!navigator.geolocation) {
+        console.log('Geolocation not supported.');
+        return;
+      }
+      
+      // 2. Request current position (success callback, error callback)
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          console.log('Latitude:', position.coords.latitude);
+          console.log('Longitude:', position.coords.longitude);
+        },
+        function (error) {
+          console.error('Error:', error.message);
+        }
+      );
+    }
+  </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Display Geolocation</title>
+</head>
+<body>
+
+  <button onclick="showLocation()">Show my location</button>
+  <p id="output">Click the button to view your coordinates.</p>
+
+  <script>
+    function showLocation() {
+      const out = document.getElementById('output');
+      
+      if (!navigator.geolocation) {
+        out.innerHTML = 'Geolocation not supported.';
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          // Build string and assign to the paragraph element
+          out.innerHTML =
+            'Lat: ' + position.coords.latitude +
+            ', Lon: ' + position.coords.longitude;
+        },
+        function () {
+          // Handle permission denied or errors
+          out.innerHTML = 'Unable to retrieve your location.';
+        }
+      );
+    }
+  </script>
+
+</body>
+</html>
